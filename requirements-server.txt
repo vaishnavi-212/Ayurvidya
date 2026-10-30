@@ -1,3 +1,6 @@
 -r requirements-core.txt
 fastapi>=0.110
 uvicorn[standard]>=0.27
+python-multipart>=0.0.9      # Excel upload
+chromadb>=1.0                # vector_store: chroma
+psycopg[binary]>=3.1         # student notes on Postgres (DATABASE_URL)

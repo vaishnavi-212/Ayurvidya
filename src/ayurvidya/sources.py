@@ -19,6 +19,10 @@ def source_label(cid: str, chunks_by_id: dict | None = None) -> str:
     if cid.startswith("step:"):                       # step:su.ni.1.3:5
         _, sid, n = cid.split(":")
         return f"{STEP_NAMES.get(int(n), 'Step ' + n)} of {verse_label(sid)}"
+    if cid.startswith("note:"):                       # note:42
+        return "Your notes"
+    if cid.startswith("kg:"):
+        return "Knowledge graph"
     if cid.startswith("mula."):                       # mula.su.ni.1.13
         return f"Sushruta Samhita, {verse_label(cid[5:])}"
     c = (chunks_by_id or {}).get(cid)

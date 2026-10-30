@@ -1,11 +1,9 @@
--r requirements-core.txt
-# API
-fastapi>=0.110
-uvicorn[standard]>=0.27
-# dense embeddings + reranker (downloads models from Hugging Face on first use, ~2 GB)
+-r requirements-server.txt
+# laptop only: dense embeddings + reranker (downloads models from Hugging Face on first use, ~2 GB)
 sentence-transformers>=3.0
-# optional
-chromadb>=0.5               # only if vector_store: chroma
 indic-transliteration>=2.3  # Harvard-Kyoto / ITRANS / SLP1 queries
 vidyut>=0.4                 # Sanskrit kosha, sandhi, metre tools (data download needed)
+# tests + paper figures
 pytest>=8.0
+httpx>=0.27                 # FastAPI TestClient
+matplotlib>=3.8

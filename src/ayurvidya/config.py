@@ -39,6 +39,29 @@ class Settings:
     temperature: float = 0.0
     max_tokens: int = 2000
     max_retries: int = 2           # re-asks when a step's output fails validation
+    llm_api_key_env: str = "OPENAI_API_KEY"   # env var holding the key for the step LLM
+    # chatbot (its own model + limits; empty chat_llm = use the step LLM)
+    chat_llm: str = ""             # e.g. openai:llama-3.1-8b-instant (Groq) | openai:llama3.2:3b (Ollama)
+    chat_llm_base_url: str = ""    # https://api.groq.com/openai/v1 | http://localhost:11434/v1
+    chat_api_key_env: str = "GROQ_API_KEY"
+    chat_max_tokens: int = 400
+    chat_temperature: float = 0.2
+    chat_retries: int = 1          # one quick retry, never the long back-off
+    chat_steps: int = 3            # saved steps put in the chat prompt (most relevant first)
+    chat_refs: int = 4             # references put in the chat prompt
+    chat_ref_chars: int = 700      # each reference trimmed to this many characters
+    chat_max_context_chars: int = 6000
+    chat_cache_size: int = 256
+    # pipeline switches (each can be turned off for the ablation)
+    query_expansion: bool = True   # synonyms + English -> Sanskrit glossary (data/synonyms.csv)
+    hyde: bool = False             # one-line hypothetical answer as an extra query (costs 1 LLM call)
+    dedupe: bool = True            # drop overlapping / near-duplicate chunks, pick with MMR
+    citation_check: bool = True    # mark answer sentences whose cited source does not support them
+    relevance_gate: bool = True    # say "not found" without calling the LLM when nothing relevant is retrieved
+    gate_min_overlap: float = 0.15
+    use_kg: bool = True            # use data/kg/facts.csv when it exists (graph RAG)
+    embed_dim: int = 768           # output size for gemini embeddings
+    timing_log: str = "outputs/chat_timing.csv"
     extra: dict[str, Any] = field(default_factory=dict)
 
 

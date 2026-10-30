@@ -3,15 +3,37 @@ services:
     name: ayurvidya
     runtime: python
     plan: free
-    buildCommand: >-
-      pip install -r requirements-server.txt &&
-      python scripts/build_kb.py &&
-      python scripts/share_answers.py import
+    buildCommand: pip install -r requirements-server.txt && python scripts/build_kb.py && python scripts/share_answers.py import
     startCommand: uvicorn ayurvidya.api:api --app-dir src --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
     envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
       - key: AYV_LLM
-        value: openai:gemini-3.5-flash-lite
+        sync: false
       - key: AYV_LLM_BASE_URL
-        value: https://generativelanguage.googleapis.com/v1beta/openai
+        sync: false
       - key: OPENAI_API_KEY
         sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: AYV_EMBEDDER
+        value: tfidf
+      - key: AYV_VECTOR_STORE
+        value: numpy
+      - key: AYV_CHAT_LLM
+        value: openai:llama-3.1-8b-instant
+      - key: AYV_CHAT_LLM_BASE_URL
+        value: https://api.groq.com/openai/v1
+      - key: AYV_CHAT_API_KEY_ENV
+        value: GROQ_API_KEY
+      - key: GROQ_API_KEY
+        sync: false
+      - key: AYV_CLASS_CODE
+        sync: false
+      - key: AYV_NOTES_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: ADMIN_TOKEN
+        generateValue: true

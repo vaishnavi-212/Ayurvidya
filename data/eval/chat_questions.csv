@@ -1,0 +1,21 @@
+qid,shloka_id,question,kind
+c01,su.ni.1.13,Which Vayu moves in the mouth and what does it do?,single
+c02,su.ni.1.13,What is the meaning of देहधृक् here?,single
+c03,su.ni.1.13,Explain the grammar of this verse simply,single
+c04,su.ni.1.13,Which diseases does this Vayu cause when it is vitiated?,single
+c05,su.ni.1.13,Why does the author call Prana the holder of the body?,single
+c06,su.ni.1.22,What is the main point of this verse?,single
+c07,su.ni.1.22,Which word in this verse comes from a verbal root? Name the root,single
+c08,su.ni.1.22,Arrange this verse in prose order and explain it,single
+c09,su.ni.1.22,What is hinted at between the lines here?,single
+c10,su.ni.1.22,Explain the first line word by word,single
+c11,,Names of the five types of Vayu,multi
+c12,,Where are Prana and Udana located?,multi
+c13,,Which Vayu causes hiccup and breathing trouble?,multi
+c14,,What causes Vatarakta?,multi
+c15,,What is hemiplegia (Pakshaghata)?,multi
+c16,,Explain facial palsy (Ardita),multi
+c17,,What happens when Vata is covered by Pitta?,multi
+c18,,Which Vayu lives in the colon and what does it do?,multi
+c19,,What are the signs of Apatantraka?,multi
+c20,,How do I bake a chocolate cake?,offtopic

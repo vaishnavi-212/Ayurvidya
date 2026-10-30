@@ -1,21 +1,44 @@
 # Ayurvidya RAG settings. Any key can be overridden with an environment variable AYV_<KEY>,
-# e.g.  AYV_LLM=anthropic:claude-sonnet-5-5   AYV_EMBEDDER=st:BAAI/bge-m3
+# e.g.  AYV_CHAT_LLM=openai:llama-3.3-70b-versatile   AYV_EMBEDDER=gemini:gemini-embedding-001
 data_dir: data
 kb_dir: data/kb
 prompts_dir: prompts
 db_path: data/ayurvidya.sqlite3
 
-embedder: tfidf            # tfidf (offline) | st:BAAI/bge-m3 | st:Qwen/Qwen3-Embedding-0.6B
-vector_store: numpy        # numpy (exact) | chroma
-reranker: ""               # "" | bge:BAAI/bge-reranker-v2-m3
-
+# retrieval
+embedder: tfidf            # tfidf (offline) | gemini:gemini-embedding-001 (online) | st:BAAI/bge-m3 (laptop)
+vector_store: numpy        # numpy (exact, in memory) | chroma (persistent, metadata filters)
+reranker: ""               # "" | bge:BAAI/bge-reranker-v2-m3 (laptop only, chat only)
 dense_k: 20
 sparse_k: 20
 rrf_k: 60
 final_k: 6
 
-llm: mock                  # mock | anthropic:claude-sonnet-5-5 | openai:qwen2.5:14b (with llm_base_url)
-llm_base_url: ""           # e.g. http://localhost:11434/v1 for Ollama
+# step generation (offline, once per verse): Gemini through its OpenAI-compatible endpoint
+llm: mock                  # e.g. openai:gemini-3.5-flash-lite  (set in .env as AYV_LLM)
+llm_base_url: ""           # e.g. https://generativelanguage.googleapis.com/v1beta/openai/
+llm_api_key_env: OPENAI_API_KEY
 temperature: 0.0
 max_tokens: 2000
 max_retries: 2
+
+# chatbot (live): Llama. Empty chat_llm = use the step model.
+chat_llm: ""               # openai:llama-3.1-8b-instant (Groq, fast) | openai:llama-3.3-70b-versatile (Groq, better)
+                           # | openai:llama3.2:3b (Ollama on your laptop, offline)
+chat_llm_base_url: ""      # https://api.groq.com/openai/v1 | http://localhost:11434/v1
+chat_api_key_env: GROQ_API_KEY
+chat_max_tokens: 400
+chat_temperature: 0.2
+chat_retries: 1
+chat_steps: 3
+chat_refs: 4
+chat_ref_chars: 700
+chat_max_context_chars: 6000
+
+# pipeline switches (turn off one at a time for the ablation)
+query_expansion: true
+hyde: false
+dedupe: true
+citation_check: true
+relevance_gate: true
+use_kg: true

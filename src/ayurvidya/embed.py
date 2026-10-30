@@ -11,7 +11,10 @@ All embedders return L2-normalised float32 rows, so cosine similarity == dot pro
 """
 from __future__ import annotations
 
+import hashlib
+import os
 import pickle
+import time
 from pathlib import Path
 from typing import Protocol
 
@@ -113,12 +116,96 @@ class SentenceTransformerEmbedder:
         Path(path).write_text(self.name, encoding="utf-8")
 
 
-def make_embedder(spec: str) -> Embedder:
+class GeminiEmbedder:
+    """gemini-embedding-001 through the REST API. Documents and questions use different task types,
+    which the model was trained for. Vectors are cut to `dim` (Matryoshka) and L2-normalised."""
+    URL = "https://generativelanguage.googleapis.com/v1beta/models/{m}:batchEmbedContents"
+
+    def __init__(self, model: str = "gemini-embedding-001", dim: int = 768, batch: int = 100):
+        self.name, self.model, self.dim, self.batch = f"gemini:{model}", model, dim, batch
+        self.key = os.environ.get("GEMINI_API_KEY") or os.environ.get("OPENAI_API_KEY")
+
+    def _embed(self, texts: list[str], task: str) -> np.ndarray:
+        import requests
+        if not self.key:
+            raise RuntimeError("Set GEMINI_API_KEY in .env for gemini embeddings")
+        out = []
+        for s in range(0, len(texts), self.batch):
+            body = {"requests": [{"model": f"models/{self.model}", "content": {"parts": [{"text": t}]},
+                                  "taskType": task, "outputDimensionality": self.dim} for t in texts[s:s + self.batch]]}
+            delay = 5.0
+            for attempt in range(6):
+                r = requests.post(self.URL.format(m=self.model), json=body, timeout=60,
+                                  headers={"x-goog-api-key": self.key, "Content-Type": "application/json"})
+                if r.status_code == 200:
+                    out += [e["values"] for e in r.json()["embeddings"]]
+                    break
+                if r.status_code not in (429, 500, 503) or attempt == 5:
+                    raise RuntimeError(f"Gemini embeddings HTTP {r.status_code}: {r.text[:300]}")
+                time.sleep(delay)
+                delay *= 2
+        return _l2(np.array(out, dtype=np.float32))
+
+    def fit(self, texts: list[str]) -> None:
+        return None
+
+    def embed_documents(self, texts: list[str]) -> np.ndarray:
+        return self._embed([normalize(t) for t in texts], "RETRIEVAL_DOCUMENT")
+
+    def embed_query(self, text: str) -> np.ndarray:
+        return self._embed([text], "RETRIEVAL_QUERY")[0]
+
+    def save(self, path: Path) -> None:
+        Path(path).write_text(self.name, encoding="utf-8")
+
+
+class CachedEmbedder:
+    """Wraps a dense embedder so each chunk text is embedded once, ever. Vectors are stored by text hash
+    in data/vectors/<embedder>.npz (small; commit it), so a rebuild - or a Render deploy - only calls
+    the API or the model for new or changed chunks."""
+
+    def __init__(self, inner, path: Path):
+        self.inner, self.path, self.name = inner, Path(path), inner.name
+        self.store: dict[str, np.ndarray] = {}
+        if self.path.exists():
+            z = np.load(self.path, allow_pickle=False)
+            self.store = dict(zip(z["keys"].tolist(), z["vecs"]))
+
+    @staticmethod
+    def key(text: str) -> str:
+        return hashlib.sha1(text.encode("utf-8")).hexdigest()[:16]
+
+    def fit(self, texts):
+        return self.inner.fit(texts)
+
+    def embed_documents(self, texts: list[str]) -> np.ndarray:
+        keys = [self.key(t) for t in texts]
+        todo = [i for i, k in enumerate(keys) if k not in self.store]
+        if todo:
+            vecs = self.inner.embed_documents([texts[i] for i in todo])
+            for i, v in zip(todo, vecs):
+                self.store[keys[i]] = np.asarray(v, dtype=np.float32)
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            used = {k: self.store[k] for k in dict.fromkeys(keys)}          # drop vectors of deleted chunks
+            np.savez_compressed(self.path, keys=np.array(list(used)), vecs=np.stack(list(used.values())))
+        print(f"   embeddings: {len(texts) - len(todo)} from cache, {len(todo)} new")
+        return np.stack([self.store[k] for k in keys])
+
+    def embed_query(self, text: str) -> np.ndarray:
+        return self.inner.embed_query(text)
+
+    def save(self, path: Path) -> None:
+        self.inner.save(path)
+
+
+def make_embedder(spec: str, dim: int = 768) -> Embedder:
     if spec == "tfidf":
         return TfidfEmbedder()
     if spec.startswith("st:"):
         return SentenceTransformerEmbedder(spec[3:])
-    raise ValueError(f"Unknown embedder spec '{spec}' (use 'tfidf' or 'st:<model>')")
+    if spec.startswith("gemini:"):
+        return GeminiEmbedder(spec[7:], dim)
+    raise ValueError(f"Unknown embedder spec '{spec}' (use 'tfidf', 'gemini:<model>' or 'st:<model>')")
 
 
 def load_embedder(spec: str, kb_dir: Path) -> Embedder:

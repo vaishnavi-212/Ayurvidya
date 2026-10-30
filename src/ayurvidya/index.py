@@ -17,7 +17,7 @@ from pathlib import Path
 import numpy as np
 from scipy import sparse
 
-from .embed import Embedder, load_embedder, make_embedder
+from .embed import CachedEmbedder, Embedder, load_embedder, make_embedder
 from .ingest import load_chunks, save_chunks
 from .schema import Chunk
 from .text import fold_for_search
@@ -31,7 +31,8 @@ class NumpyVectorStore:
         self.ids = ids
         self.m = matrix.astype(np.float32)      # dense ndarray or scipy sparse CSR (TF-IDF)
 
-    def search(self, q: np.ndarray, k: int, allowed: np.ndarray | None = None) -> list[tuple[int, float]]:
+    def search(self, q: np.ndarray, k: int, allowed: np.ndarray | None = None,
+               source_types=None) -> list[tuple[int, float]]:
         scores = np.asarray(self.m @ q.astype(np.float32)).ravel()
         if allowed is not None:
             scores = np.where(allowed, scores, -np.inf)
@@ -47,30 +48,46 @@ class NumpyVectorStore:
         return int(self.m.shape[1])
 
 
-class ChromaVectorStore:  # pragma: no cover - optional backend
-    """Same interface, backed by a persistent Chroma collection (cosine space)."""
+class ChromaVectorStore:  # pragma: no cover - optional backend (pip install chromadb)
+    """Persistent Chroma collection (cosine space) with metadata, so a search can be filtered by source
+    type inside the database. Rebuilt automatically when the chunk set changes (sha in the metadata)."""
 
-    def __init__(self, ids: list[str], matrix: np.ndarray | None, path: Path, name: str = "ayurvidya"):
+    def __init__(self, ids: list[str], matrix: np.ndarray | None, path: Path, chunks=None, sha: str = "",
+                 name: str = "ayurvidya"):
         import chromadb
         self.ids = ids
         self.index_of = {cid: i for i, cid in enumerate(ids)}
-        client = chromadb.PersistentClient(path=str(path))
-        self.col = client.get_or_create_collection(name, metadata={"hnsw:space": "cosine"})
-        if matrix is not None and self.col.count() != len(ids):
-            for s in range(0, len(ids), 1000):
-                self.col.upsert(ids=ids[s:s + 1000], embeddings=matrix[s:s + 1000].tolist())
+        self.client = chromadb.PersistentClient(path=str(path))
+        col = self.client.get_or_create_collection(name, metadata={"hnsw:space": "cosine", "sha": sha or "-"})
+        if matrix is not None and ((col.metadata or {}).get("sha") != (sha or "-") or col.count() != len(ids)):
+            self.client.delete_collection(name)
+            col = self.client.create_collection(name, metadata={"hnsw:space": "cosine", "sha": sha or "-"})
+            metas = [{"source_type": c.source_type, "work": c.work or "-", "shlokas": ",".join(c.shloka_ids) or "-",
+                      "step": int(c.meta.get("step", 0) or 0)} for c in chunks] if chunks else None
+            for s in range(0, len(ids), 500):
+                col.upsert(ids=ids[s:s + 500], embeddings=np.asarray(matrix[s:s + 500]).tolist(),
+                           metadatas=metas[s:s + 500] if metas else None)
+        self.col = col
 
-    def search(self, q: np.ndarray, k: int, allowed: np.ndarray | None = None) -> list[tuple[int, float]]:
-        n = self.col.count() if allowed is None else min(self.col.count(), max(k * 5, 50))
-        res = self.col.query(query_embeddings=[q.tolist()], n_results=n)
+    def search(self, q: np.ndarray, k: int, allowed: np.ndarray | None = None,
+               source_types=None) -> list[tuple[int, float]]:
+        where = {"source_type": {"$in": list(source_types)}} if source_types else None
+        n = min(self.col.count(), max(k * 3, 30))
+        if n == 0:
+            return []
+        res = self.col.query(query_embeddings=[np.asarray(q).tolist()], n_results=n, where=where)
         out = []
         for cid, dist in zip(res["ids"][0], res["distances"][0]):
-            i = self.index_of[cid]
-            if allowed is None or allowed[i]:
+            i = self.index_of.get(cid)
+            if i is not None and (allowed is None or allowed[i]):
                 out.append((i, 1.0 - float(dist)))
             if len(out) == k:
                 break
         return out
+
+    @property
+    def dim(self) -> int:
+        return int(len(self.col.peek(1)["embeddings"][0])) if self.col.count() else 0
 
 
 # ------------------------------------------------------------------ sparse
@@ -157,6 +174,9 @@ class KnowledgeBase:
         kb_dir = Path(kb_dir)
         kb_dir.mkdir(parents=True, exist_ok=True)
         emb = make_embedder(embedder_spec)
+        if embedder_spec != "tfidf":      # dense: embed each chunk once ever, vectors kept in data/vectors/
+            slug = embedder_spec.replace(":", "_").replace("/", "_")
+            emb = CachedEmbedder(emb, kb_dir.parent / "vectors" / f"{slug}.npz")
         texts = [c.text for c in chunks]
         emb.fit(texts)
         matrix = emb.embed_documents(texts)
@@ -168,7 +188,8 @@ class KnowledgeBase:
                     "dim": int(matrix.shape[1]),
                     "chunks_sha1": hashlib.sha1("".join(texts).encode("utf-8")).hexdigest()}
         (kb_dir / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
-        return cls(chunks, emb, cls._dense(vector_store, [c.id for c in chunks], matrix, kb_dir))
+        return cls(chunks, emb, cls._dense(vector_store, [c.id for c in chunks], matrix, kb_dir, chunks,
+                                           manifest["chunks_sha1"]))
 
     @classmethod
     def load(cls, kb_dir: Path):
@@ -180,16 +201,17 @@ class KnowledgeBase:
         chunks = load_chunks(kb_dir / "chunks.jsonl")
         matrix = _load_matrix(kb_dir)
         emb = load_embedder(manifest["embedder"], kb_dir)
-        return cls(chunks, emb, cls._dense(manifest["vector_store"], [c.id for c in chunks], matrix, kb_dir))
+        return cls(chunks, emb, cls._dense(manifest["vector_store"], [c.id for c in chunks], matrix, kb_dir, chunks,
+                                           manifest.get("chunks_sha1", "")))
 
     @staticmethod
-    def _dense(kind: str, ids, matrix, kb_dir):
+    def _dense(kind: str, ids, matrix, kb_dir, chunks=None, sha: str = ""):
         if kind == "numpy":
             return NumpyVectorStore(ids, matrix)
         if kind == "chroma":
             if sparse.issparse(matrix):
-                raise ValueError("Chroma needs dense embeddings: use an st:<model> embedder with vector_store: chroma")
-            return ChromaVectorStore(ids, matrix, Path(kb_dir) / "chroma")
+                raise ValueError("Chroma needs dense embeddings: use gemini:<model> or st:<model> with vector_store: chroma")
+            return ChromaVectorStore(ids, matrix, Path(kb_dir) / "chroma", chunks, sha)
         raise ValueError(f"Unknown vector_store '{kind}'")
 
     # helpers ---------------------------------------------------------
@@ -210,4 +232,3 @@ class KnowledgeBase:
     def chunks_for_shloka(self, shloka_id: str, source_types=None) -> list[Chunk]:
         return [self.chunks[i] for i in self.by_shloka.get(shloka_id, [])
                 if not source_types or self.chunks[i].source_type in source_types]
-
