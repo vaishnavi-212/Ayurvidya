@@ -28,6 +28,7 @@ SOURCE_TYPES = (
     "grammar",           # vyakarana rules, sandhi/samasa notes, tantrayukti definitions
     "crosstext",         # parallel passages: Charaka, Ashtanga Hridaya, other Sushruta chapters
     "gold",              # scholar-validated 7-step annotations, used as few-shot examples
+    "student_approved",  # student notes a teacher approved (scripts/review_notes.py)
 )
 
 
