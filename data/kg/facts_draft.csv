@@ -1,0 +1,53 @@
+subject,relation,object,object_deva,verse,quote,status
+Vayu,causes,in the stomach: vomiting and other diseases,छर्द्यादीन् गदान्,22,वायुरामाशये क्रुद्धश्छर्द्यादीन् कुरुते गदान्,draft
+Vayu,causes,in blood: ulcers,व्रणान्,26,व्रणांश्च रक्तगो,draft
+Vayu,causes,in muscle: painful lumps,ग्रन्थीन् सशूलान्,26,ग्रन्थीन् सशूलान् मांससंश्रितः,draft
+Vayu,causes,in fat: lumps with mild pain and without ulcers,ग्रन्थीन् मन्दरुजः अव्रणान्,26,मेदःश्रितः कुर्याद्ग्रन्थीन्मन्दरुजोऽव्रणान्,draft
+Vayu,causes,in the veins: pain,शूलम्,27,कुर्यात् सिरागतः शूलं,draft
+Vayu,causes,in the veins: contraction and filling of veins,सिराकुञ्चनपूरणम्,27,सिराकुञ्चनपूरणम्,draft
+Vayu,causes,in the ligaments: stiffness,स्तम्भ,27,स्नायुप्राप्तः स्तम्भकम्पौ,draft
+Vayu,causes,in the ligaments: tremor,कम्प,27,स्नायुप्राप्तः स्तम्भकम्पौ,draft
+Vayu,causes,in the ligaments: pain,शूलम्,27,शूलमाक्षेपणं,draft
+Vayu,causes,in the ligaments: convulsion,आक्षेपणम्,27,शूलमाक्षेपणं तथा,draft
+Vayu,causes,in the marrow: pain that never subsides,मज्जगते रुक् न कदाचित् प्रशाम्यति,29,तथा मज्जगते रुक् च न कदाचित् प्रशाम्यति,draft
+Vayu,causes,in the semen: absence or abnormal emission,अप्रवृत्तिः प्रवृत्तिर्वा विकृता शुक्रगे,29,अप्रवृत्तिः प्रवृत्तिर्वा विकृता शुक्रगेऽनिले,draft
+Vayu,performs,"moves successively through the hands, feet, head, and tissues",हस्तपादशिरोधातूंस्तथा सञ्चरति क्रमात्,30,हस्तपादशिरोधातूंस्तथा सञ्चरति क्रमात्,draft
+Vayu,performs,pervades the entire body,व्याप्नुयाद्वाऽखिलं देहम्,30,व्याप्नुयाद्वाऽखिलं देहं,draft
+Vayu,causes,numerous diseases when reaching body parts,अमितान् गदान्,32,कुर्यादवयवप्राप्तो मारुतस्त्वमितान् गदान्,draft
+Vayu,covered_by_pitta,burning sensation,दाह,32,दाहसन्तापमूर्च्छाः स्युर्वायौ पित्तसमन्विते,draft
+Vayu,covered_by_pitta,heat,सन्ताप,32,दाहसन्तापमूर्च्छाः स्युर्वायौ पित्तसमन्विते,draft
+Vayu,covered_by_pitta,fainting,मूर्च्छाः,32,दाहसन्तापमूर्च्छाः स्युर्वायौ पित्तसमन्विते,draft
+Vayu,covered_by_kapha,coldness,शैत्य,33,शैत्यशोफगुरुत्वानि,draft
+Vayu,covered_by_kapha,swelling,शोफ,33,शैत्यशोफगुरुत्वानि,draft
+Vayu,covered_by_kapha,heaviness,गुरुत्व,33,शैत्यशोफगुरुत्वानि,draft
+Vayu,covered_by_kapha,pricking pain as if with needles,सूचीभिरिव निस्तोदः,33,सूचीभिरिव निस्तोदः,draft
+Vayu,covered_by_kapha,aversion to touch,स्पर्शद्वेषः,33,स्पर्शद्वेषः,draft
+Vayu,covered_by_kapha,numbness,प्रसुप्तता,33,प्रसुप्तता,draft
+Vayu,causes,in blood: remaining disorders of Pitta,शेषाः पित्तविकाराः,34,शेषाः पित्तविकाराः स्युर्मारुते शोणितान्विते,draft
+Prana,covered_by_pitta,vomiting and burning sensation,छर्दिर्दाहश्च,34,प्राणे पित्तावृते छर्दिर्दाहश्चैवोपजायते,draft
+Udana,covered_by_kapha,weakness,दौर्बल्यम्,35,दौर्बल्यं,draft
+Udana,covered_by_kapha,languor,सदनम्,35,सदनं,draft
+Udana,covered_by_kapha,drowsiness,तन्द्रा,35,तन्द्रा,draft
+Udana,covered_by_kapha,discoloration,वैवर्ण्यम्,35,वैवर्ण्यं,draft
+Udana,covered_by_pitta,fainting,मूर्च्छा,35,मूर्च्छादाहभ्रमक्लमाः,draft
+Udana,covered_by_pitta,burning sensation,दाह,35,मूर्च्छादाहभ्रमक्लमाः,draft
+Udana,covered_by_pitta,dizziness,भ्रम,35,मूर्च्छादाहभ्रमक्लमाः,draft
+Udana,covered_by_pitta,exhaustion,क्लमाः,35,मूर्च्छादाहभ्रमक्लमाः,draft
+Samana,covered_by_kapha,absence of sweat and horripilation,अस्वेदहर्षौ,36,"अस्वेदहर्षौ मन्दोऽग्निः शीतस्तम्भौ कफावृते ।
+समाने",draft
+Samana,covered_by_kapha,weak digestive fire,मन्दोऽग्निः,36,"अस्वेदहर्षौ मन्दोऽग्निः शीतस्तम्भौ कफावृते ।
+समाने",draft
+Samana,covered_by_kapha,coldness and stiffness,शीतस्तम्भौ,36,"अस्वेदहर्षौ मन्दोऽग्निः शीतस्तम्भौ कफावृते ।
+समाने",draft
+Samana,covered_by_pitta,"sweating, burning sensation, heat, and fainting",स्वेददाहौष्ण्यमूर्च्छनम्,36,समाने पित्तसंयुक्ते स्वेददाहौष्ण्यमूर्च्छनम्,draft
+Apana,covered_by_kapha,feces and urine mixed with excess kapha,कफाधिकं विण्मूत्रम्,37,कफाधिकं च विण्मूत्रं,draft
+Apana,covered_by_kapha,horripilation,रोमहर्षः,37,रोमहर्षः कफावृते,draft
+Apana,covered_by_pitta,burning sensation and heat,दाहौष्ण्ये,37,अपाने पित्तसंयुक्ते दाहौष्ण्ये,draft
+Apana,covered_by_pitta,menorrhagia,असृग्दरः,37,स्यादसृग्दरः,draft
+Vyana,covered_by_kapha,heaviness of the lower body,अधःकायगुरुत्वम्,38,अधःकायगुरुत्वं च तस्मिन्नेव कफावृते,draft
+Vyana,covered_by_pitta,burning sensation,दाहः,38,पित्तावृते दाहो,draft
+Vyana,covered_by_pitta,tossing of the limbs,गात्रविक्षेपणम्,38,गात्रविक्षेपणं,draft
+Vyana,covered_by_pitta,exhaustion,क्लमः,38,क्लमः,draft
+Vyana,covered_by_kapha,heaviness in all limbs,गुरूणि सर्वगात्राणि,39,गुरूणि सर्वगात्राणि,draft
+Vyana,covered_by_kapha,stiffness of bones and joints,स्तम्भनं चास्थिपर्वणाम्,39,स्तम्भनं चास्थिपर्वणाम्,draft
+Vyana,covered_by_kapha,stiffness in movements,चेष्टास्तम्भः,39,चेष्टास्तम्भस्तथैव च,draft
