@@ -1,0 +1,39 @@
+subject,relation,object,object_deva,verse,quote,status
+Prana,located_in,mouth,वक्त्र,13,यो वायुर्वक्त्रसञ्चारी स प्राणो नाम,seed
+Prana,performs,holds the body,देहधृक्,13,स प्राणो नाम देहधृक्,seed
+Prana,performs,takes food inside,अन्नं प्रवेशयति,13,सोऽन्नं प्रवेशयत्यन्तः,seed
+Prana,performs,sustains the life breaths,प्राणान् अवलम्बते,13,प्राणांश्चाप्यवलम्बते,seed
+Prana,causes,hiccup,हिक्का,14,हिक्काश्वासादिकान् गदान्,seed
+Prana,causes,dyspnoea (difficult breathing),श्वास,14,हिक्काश्वासादिकान् गदान्,seed
+Udana,located_in,moves upward,ऊर्ध्वम्,14,उदानो नाम यस्तूर्ध्वमुपैति पवनोत्तमः,seed
+Udana,performs,"speech, singing and similar acts",भाषितगीतादि,15,तेन भाषितगीतादिविशेषोऽभिप्रवर्तते,seed
+Udana,causes,diseases above the clavicle,ऊर्ध्वजत्रुगत रोग,15,ऊर्ध्वजत्रुगतान् रोगान्,seed
+Samana,located_in,stomach and intestine,आमपक्वाशय,16,आमपक्वाशयचरः समानो,seed
+Samana,performs,works with the digestive fire,वह्निसङ्गत,16,समानो वह्निसङ्गतः,seed
+Samana,performs,digests food,अन्नं पचति,16,सोऽन्नं पचति,seed
+Samana,performs,separates the products of digestion,विशेषान् विविनक्ति,16,तज्जांश्च विशेषान्विविनक्ति,seed
+Samana,causes,gulma (abdominal lump),गुल्म,17,गुल्माग्निसादातीसारप्रभृतीन्,seed
+Samana,causes,weak digestion,अग्निसाद,17,गुल्माग्निसादातीसारप्रभृतीन्,seed
+Samana,causes,diarrhoea,अतीसार,17,गुल्माग्निसादातीसारप्रभृतीन्,seed
+Vyana,located_in,whole body,कृत्स्नदेह,17,कृत्स्नदेहचरो व्यानो,seed
+Vyana,performs,carries rasa through the body,रससंवहन,17,रससंवहनोद्यतः,seed
+Vyana,performs,makes sweat and blood flow,स्वेदासृक्स्रावण,18,स्वेदासृक्स्रावणश्चापि,seed
+Vyana,performs,five kinds of movement,पञ्चधा चेष्टा,18,पञ्चधा चेष्टयत्यपि,seed
+Vyana,causes,diseases spread over the whole body,सर्वदेहग रोग,18,प्रायशः सर्वदेहगान्,seed
+Apana,located_in,colon (seat of digested food),पक्वाधान,19,पक्वाधानालयोऽपानः,seed
+Apana,performs,"expels faeces, urine, semen, foetus and menses in time",शकृन्मूत्रं शुक्रगर्भार्तवानि,19,शकृन्मूत्रं शुक्रगर्भार्तवानि च,seed
+Apana,causes,severe diseases of bladder and anus,बस्तिगुदाश्रय रोग,20,घोरान् बस्तिगुदाश्रयान्,seed
+Vyana,causes,semen disorders and prameha (with Apana),शुक्रदोष प्रमेह,20,शुक्रदोषप्रमेहास्तु व्यानापानप्रकोपजाः,seed
+Apana,causes,semen disorders and prameha (with Vyana),शुक्रदोष प्रमेह,20,शुक्रदोषप्रमेहास्तु व्यानापानप्रकोपजाः,seed
+Vayu,performs,"five Vayus in their seats sustain the living body",स्थानस्था मारुताः पञ्च,12,स्थानस्था मारुताः पञ्च यापयन्ति शरीरिणम्,seed
+Vayu,causes,all five vitiated together destroy the body,देहं भिन्द्युः,21,युगपत् कुपिताश्चापि देहं भिन्द्युरसंशयम्,seed
+Prana,covered_by_pitta,vomiting and burning,छर्दि दाह,34,प्राणे पित्तावृते छर्दिर्दाहश्चैवोपजायते,seed
+Prana,covered_by_kapha,"weakness, lassitude, drowsiness, discolouration",दौर्बल्य सदन तन्द्रा वैवर्ण्य,35,दौर्बल्यं सदनं तन्द्रा वैवर्ण्यं च कफावृते,seed
+Udana,covered_by_pitta,"fainting, burning, giddiness, exhaustion",मूर्च्छा दाह भ्रम क्लम,35,उदाने पित्तसंयुक्ते मूर्च्छादाहभ्रमक्लमाः,seed
+Udana,covered_by_kapha,"no sweating, horripilation, weak digestion, coldness, stiffness",अस्वेद हर्ष मन्दाग्नि शीत स्तम्भ,36,अस्वेदहर्षौ मन्दोऽग्निः शीतस्तम्भौ कफावृते,seed
+Samana,covered_by_pitta,"sweating, burning, heat, fainting",स्वेद दाह औष्ण्य मूर्च्छन,36,समाने पित्तसंयुक्ते स्वेददाहौष्ण्यमूर्च्छनम्,seed
+Samana,covered_by_kapha,"excess kapha in stool and urine, horripilation",कफाधिक विण्मूत्र रोमहर्ष,37,कफाधिकं च विण्मूत्रं रोमहर्षः कफावृते,seed
+Apana,covered_by_pitta,"burning, heat, menorrhagia",दाह औष्ण्य असृग्दर,37,अपाने पित्तसंयुक्ते दाहौष्ण्ये स्यादसृग्दरः,seed
+Apana,covered_by_kapha,heaviness of the lower body,अधःकायगुरुत्व,38,अधःकायगुरुत्वं च तस्मिन्नेव कफावृते,seed
+Vyana,covered_by_pitta,"burning, flailing of limbs, exhaustion",दाह गात्रविक्षेपण क्लम,38,व्याने पित्तावृते दाहो गात्रविक्षेपणं क्लमः,seed
+Vyana,covered_by_kapha,"heaviness of all limbs, stiffness of joints and of movement",गुरु सर्वगात्र अस्थिपर्वस्तम्भन चेष्टास्तम्भ,39,गुरूणि सर्वगात्राणि स्तम्भनं चास्थिपर्वणाम्,seed

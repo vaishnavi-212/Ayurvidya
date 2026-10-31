@@ -1,0 +1,15 @@
+{"qid": "m01", "query": "Which Vayu causes hiccup and dyspnoea, and where does it move?", "relevant": ["mula.su.ni.1.13", "mula.su.ni.1.14"], "types": ["mula"], "kind": "multi"}
+{"qid": "m02", "query": "Where is Samana located and which diseases does it cause?", "relevant": ["mula.su.ni.1.16", "mula.su.ni.1.17"], "types": ["mula"], "kind": "multi"}
+{"qid": "m03", "query": "What does Vyana do and what happens when it is angered?", "relevant": ["mula.su.ni.1.17", "mula.su.ni.1.18"], "types": ["mula"], "kind": "multi"}
+{"qid": "m04", "query": "Where does Apana live, what does it expel and which diseases does it cause?", "relevant": ["mula.su.ni.1.19", "mula.su.ni.1.20"], "types": ["mula"], "kind": "multi"}
+{"qid": "m05", "query": "What does Udana do and which diseases does it cause?", "relevant": ["mula.su.ni.1.14", "mula.su.ni.1.15"], "types": ["mula"], "kind": "multi"}
+{"qid": "m06", "query": "Names and seats of the five Vayus", "relevant": ["mula.su.ni.1.12", "mula.su.ni.1.13", "mula.su.ni.1.14", "mula.su.ni.1.16", "mula.su.ni.1.17", "mula.su.ni.1.19"], "types": ["mula"], "kind": "multi"}
+{"qid": "m07", "query": "What happens when Prana is covered by Pitta or by Kapha?", "relevant": ["mula.su.ni.1.34", "mula.su.ni.1.35"], "types": ["mula"], "kind": "multi"}
+{"qid": "m08", "query": "Signs of Udana joined with Pitta and with Kapha", "relevant": ["mula.su.ni.1.35", "mula.su.ni.1.36"], "types": ["mula"], "kind": "multi"}
+{"qid": "m09", "query": "Samana covered by Pitta and covered by Kapha", "relevant": ["mula.su.ni.1.36", "mula.su.ni.1.37"], "types": ["mula"], "kind": "multi"}
+{"qid": "m10", "query": "Apana covered by Pitta and covered by Kapha", "relevant": ["mula.su.ni.1.37", "mula.su.ni.1.38"], "types": ["mula"], "kind": "multi"}
+{"qid": "m11", "query": "Vyana covered by Pitta and covered by Kapha", "relevant": ["mula.su.ni.1.38", "mula.su.ni.1.39"], "types": ["mula"], "kind": "multi"}
+{"qid": "m12", "query": "Which Vayu moves in the mouth and which one moves upward?", "relevant": ["mula.su.ni.1.13", "mula.su.ni.1.14"], "types": ["mula"], "kind": "multi"}
+{"qid": "m13", "query": "Which Vayu helps digestion and which one expels faeces and urine?", "relevant": ["mula.su.ni.1.16", "mula.su.ni.1.19"], "types": ["mula"], "kind": "multi"}
+{"qid": "m14", "query": "Which Vayu causes diarrhoea and gulma, and where does it live?", "relevant": ["mula.su.ni.1.16", "mula.su.ni.1.17"], "types": ["mula"], "kind": "multi"}
+{"qid": "m15", "query": "Which two Vayus together cause prameha and semen disorders, and what do they normally do?", "relevant": ["mula.su.ni.1.17", "mula.su.ni.1.19", "mula.su.ni.1.20"], "types": ["mula"], "kind": "multi"}
