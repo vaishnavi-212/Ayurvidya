@@ -1,0 +1,11 @@
+# Ayurvidya chat model for Ollama (offline, on a laptop).
+#   ollama pull llama3.2:3b
+#   ollama create ayurvidya-llama -f ollama/Modelfile
+# then in .env:  AYV_CHAT_LLM=openai:ayurvidya-llama   AYV_CHAT_LLM_BASE_URL=http://localhost:11434/v1
+# 16 GB RAM or more: change the first line to  FROM llama3.1:8b  (better answers, slower).
+FROM llama3.2:3b
+# Ollama's default context is too short for our prompt (Devanagari uses many tokens) - raise it,
+# otherwise the start of the prompt (the rules) is silently cut off.
+PARAMETER num_ctx 8192
+PARAMETER temperature 0.2
+PARAMETER num_predict 400
