@@ -15,6 +15,7 @@ from pathlib import Path
 
 from .text import fold_for_search
 
+GENERIC = {"vata", "disease", "cause", "sign", "seat", "action", "vitiated", "five"}
 VERSE_RE = re.compile(r"(?:verse|shloka|sloka|śloka|श्लोक[ःा]?)\s*(?:no\.?\s*)?([0-9०-९]+)", re.I)
 
 
@@ -61,7 +62,8 @@ class QueryExpander:
                 w.startswith(f) or (len(w) >= 4 and f.startswith(w)) for w in words for f in folded if len(f) >= 3)
             if hit:
                 info.groups.append(name)
-                info.added += [s for s in sa if s not in query]
+                if name not in GENERIC:          # "disease", "cause", "Vayu" match half the chapter: no help
+                    info.added += [s for s in sa if s not in query]
         return info
 
     def expand(self, query: str) -> str:

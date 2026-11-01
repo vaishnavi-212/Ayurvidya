@@ -28,7 +28,7 @@ from .store import Store
 from .verify import check_citations, parse_tags
 
 NOT_FOUND = "I could not find this in the sources for this chapter."
-CHAT_TYPES = ["mula", "commentary", "kosha", "dhatu", "grammar", "crosstext", "student_approved"]
+CHAT_TYPES = ["mula", "commentary", "kosha", "dhatu", "grammar", "crosstext", "student_approved","summary"]
 STEP_HINTS = {
     1: {"pada", "padas", "metre", "meter", "syllable", "syllables", "quarter", "line"},
     2: {"grammar", "case", "vibhakti", "declension", "form", "split", "compound", "samasa", "sandhi", "gender"},

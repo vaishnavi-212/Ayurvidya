@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scholar desk · Ayurvidya</title>
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Spectral:wght@400;600&family=Tiro+Devanagari+Sanskrit&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { padding-bottom: 0; }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    table.notes td:nth-child(6) { font-family: var(--deva); }
+    .bad { color: var(--kumkum); }
+    .tagline { font-size: .8rem; color: var(--faint); }
+  </style>
+</head>
+<body>
+  <header class="masthead">
+    <a class="brand" href="./"><img src="icon.svg" alt="" width="40" height="40">
+      <span class="brand-text"><span class="deva">आयुर्विद्या</span><b>Scholar desk</b></span></a>
+  </header>
+  <div class="rule" aria-hidden="true"></div>
+  <main class="view" id="view"></main>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const ss = { get: k => { try { return sessionStorage.getItem(k); } catch { return null; } },
+             set: (k, v) => { try { v == null ? sessionStorage.removeItem(k) : sessionStorage.setItem(k, v); } catch {} } };
+async function call(path, opts = {}) {
+  opts.headers = Object.assign({}, opts.headers || {}, { "X-Scholar": ss.get("ayv.scholar") || "", "X-Scholar-Name": ss.get("ayv.scholarName") || "scholar" });
+  const r = await fetch(path, opts);
+  if (!r.ok) { let m = `Error ${r.status}`; try { m = (await r.json()).detail || m; } catch {} const e = new Error(m); e.status = r.status; throw e; }
+  return (r.headers.get("content-type") || "").includes("json") ? r.json() : r.text();
+}
+function login(msg = "") {
+  $("#view").innerHTML = `<h1>Scholar desk</h1><p class="muted">Add or correct knowledge-graph facts. Every fact must quote its verse word for word.</p>
+    <form class="form panel" id="f"><label>Your name<input id="n" required></label><label>Scholar access code<input id="c" type="password" required></label>
+    <button class="btn">Open</button><p class="err">${esc(msg)}</p></form>`;
+  $("#f").onsubmit = e => { e.preventDefault(); ss.set("ayv.scholar", $("#c").value.trim()); ss.set("ayv.scholarName", $("#n").value.trim().replace(/[^\x20-\x7e]/g, "")); show(); };
+}
+async function show() {
+  if (!ss.get("ayv.scholar")) return login();
+  let d;
+  try { d = await call("/scholar/facts"); } catch (e) { ss.set("ayv.scholar", null); return login(e.status === 401 ? "Wrong access code." : e.message); }
+  const counts = d.facts.reduce((a, f) => (a[f.status] = (a[f.status] || 0) + 1, a), {});
+  $("#view").innerHTML = `<h1>Scholar desk</h1>
+    <p class="muted">${d.facts.length} active facts · version ${d.version} · ${Object.entries(counts).map(([k, v]) => `${v} ${k}`).join(", ")}</p>
+    <div class="panel"><h3>Upload facts (.csv or .xlsx)</h3>
+      <ol class="muted" style="padding-left:20px"><li><a href="/scholar/template">Download the template</a>, or export the current facts below and edit them.</li>
+      <li>Columns: subject, relation, object, object_deva, verse, quote, status (approved / rejected / draft). The quote must be copied exactly from the verse.</li>
+      <li>Upload. A row replaces the fact with the same subject, relation, verse and object. The chatbot uses the change immediately.</li></ol>
+      <form id="up" class="row"><input type="file" id="file" accept=".csv,.xlsx" required><button class="btn">Upload</button></form>
+      <div class="report" id="rep"></div>
+      <p class="row" style="margin-top:12px"><button class="btn line" id="undo">Undo last upload</button>
+        <button class="btn line" id="exp">Export facts.csv (for the paper)</button>
+        <a class="btn line" href="./#/graph">Open the Vayu map</a></p></div>
+    <h2 style="margin-top:24px">Facts</h2>
+    <table class="notes"><thead><tr><th>Verse</th><th>Subject</th><th>Relation</th><th>Object</th><th>Status</th><th>Quote</th></tr></thead><tbody>
+    ${d.facts.map(f => `<tr><td>${esc(f.verse)}</td><td>${esc(f.subject)}</td><td>${esc(f.relation)}</td><td>${esc(f.object)}<br><span class="deva">${esc(f.object_deva)}</span></td>
+      <td class="${f.status === "rejected" ? "bad" : ""}">${esc(f.status)}<div class="tagline">v${f.version} · ${esc(f.added_by)}</div></td><td>${esc(f.quote)}</td></tr>`).join("")}</tbody></table>`;
+  $("#up").onsubmit = async e => {
+    e.preventDefault();
+    const fd = new FormData(); fd.append("file", $("#file").files[0]);
+    $("#rep").textContent = "Checking every row against its verse…";
+    try {
+      const r = await call("/scholar/upload", { method: "POST", body: fd });
+      $("#rep").innerHTML = `<p><b>${r.ok_rows} facts saved</b> (version ${r.version}).${r.errors.length ? ` ${r.errors.length} rows need fixing:` : ""}</p>
+        ${r.errors.length ? `<ul>${r.errors.slice(0, 40).map(x => `<li>Row ${x.row}: ${esc(x.problem)}</li>`).join("")}</ul>` : ""}`;
+      if (r.ok_rows) setTimeout(show, 1500);
+    } catch (err) { $("#rep").innerHTML = `<p class="err">${esc(err.message)}</p>`; }
+  };
+  $("#undo").onclick = async () => { if (!confirm("Remove the last upload?")) return; await call("/scholar/undo", { method: "POST" }); show(); };
+  $("#exp").onclick = async () => {
+    const csv = await call("/scholar/export");
+    const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" })); a.download = "facts.csv"; a.click();
+  };
+}
+show();
+</script>
+</body>
+</html>

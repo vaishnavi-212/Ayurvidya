@@ -29,6 +29,7 @@ SOURCE_TYPES = (
     "crosstext",         # parallel passages: Charaka, Ashtanga Hridaya, other Sushruta chapters
     "gold",              # scholar-validated 7-step annotations, used as few-shot examples
     "student_approved",  # student notes a teacher approved (scripts/review_notes.py)
+    "summary",           # AI summary of one section of the chapter (scripts/make_section_summaries.py)
 )
 
 

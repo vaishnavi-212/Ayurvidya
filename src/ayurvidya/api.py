@@ -181,7 +181,13 @@ try:                                   # student notes (Excel upload) - added in
 except ImportError:
     pass
 
-
+try:                                   # scholar uploads of knowledge-graph facts - added in its own commit
+    from .kg_api import enable as enable_scholar
+    _scholar = enable_scholar(app_state)
+    if _scholar is not None:
+        api.include_router(_scholar)
+except ImportError:
+    pass
 # ---------------------------------------------------------------- web app
 @api.get("/", include_in_schema=False)
 def home():

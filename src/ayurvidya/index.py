@@ -11,6 +11,7 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import re
 from collections import Counter
 from pathlib import Path
 
@@ -97,7 +98,9 @@ def bm25_tokens(text: str) -> list[str]:
     Sanskrit sandhi glues words together (वायुरामाशये = वायुः + आमाशये), so whole-word matching alone
     misses. 4-grams let 'vayu' inside 'vayuramasaye' still match a query for 'vayu'."""
     toks: list[str] = []
-    for w in fold_for_search(text).split():
+        # fold Devanagari and Latin runs separately: a mixed query ("hiccup हिक्का") would otherwise lose one script
+    folded = " ".join(fold_for_search(t) for t in re.findall(r"[ऀ-ॿ]+|[^\sऀ-ॿ]+", text))
+    for w in folded.split():
         toks.append(w)
         if len(w) > 4:
             toks.extend(f"#{w[i:i + 4]}" for i in range(len(w) - 3))
