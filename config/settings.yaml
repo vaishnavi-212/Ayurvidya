@@ -22,11 +22,11 @@ temperature: 0.0
 max_tokens: 2000
 max_retries: 2
 
-# chatbot (live): Llama. Empty chat_llm = use the step model.
-chat_llm: ""               # openai:llama-3.1-8b-instant (Groq, fast) | openai:llama-3.3-70b-versatile (Groq, better)
-                           # | openai:llama3.2:3b (Ollama on your laptop, offline)
-chat_llm_base_url: ""      # https://api.groq.com/openai/v1 | http://localhost:11434/v1
-chat_api_key_env: GROQ_API_KEY
+# chatbot (live). Empty chat_llm = use the step model.
+chat_llm: openai:gemini-3.5-flash-lite        # online (Render)
+chat_llm_base_url: https://generativelanguage.googleapis.com/v1beta/openai/
+chat_api_key_env: GEMINI_CHAT_KEY             # a second Gemini key, its own free quota
+# offline Llama: chat_llm: openai:ayurvidya-llama   chat_llm_base_url: http://localhost:11434/v1
 chat_max_tokens: 400
 chat_temperature: 0.2
 chat_retries: 1

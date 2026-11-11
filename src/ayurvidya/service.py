@@ -1,8 +1,7 @@
 """Wires settings -> knowledge base -> retriever -> LLMs -> store -> orchestrator/chatbot.
 Both the scripts and the API create the app through `build_app()`, so they always agree.
 
-Two LLMs: the STEP LLM (Gemini, offline generation of the 7 steps) and the CHAT LLM (Llama via Groq or
-Ollama, live). Optional parts switch on when their files exist: the knowledge graph (data/kg/facts.csv,
+Two LLMs: the STEP LLM (Gemini, offline generation of the 7 steps) and the CHAT LLM (Gemini online, Llama 3.2 on Ollama offline). Optional parts switch on when their files exist: the knowledge graph (data/kg/facts.csv,
 module kg.py) and student notes (module notes.py)."""
 from __future__ import annotations
 
